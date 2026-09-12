@@ -1,4 +1,5 @@
 // src/components/product-list-item.tsx
+import { useState } from 'react';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { Pressable, StyleSheet } from 'react-native';
@@ -9,6 +10,8 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 export function ProductListItem({ product }: { product: Product }) {
+  const [imageFailed, setImageFailed] = useState(false);
+
   return (
     <Link
       href={{ pathname: '/product/[id]', params: { id: String(product.id) } }}
@@ -16,13 +19,18 @@ export function ProductListItem({ product }: { product: Product }) {
     >
       <Pressable>
         <ThemedView type="backgroundElement" style={styles.row}>
-          <Image
-            source={product.thumbnail}
-            style={styles.thumbnail}
-            contentFit="cover"
-            placeholder={{ blurhash: 'L6PZfSi_.AyE_3t7t7R**0o#DgR4' }}
-            transition={200}
-          />
+          {imageFailed ? (
+            <ThemedView type="backgroundSelected" style={styles.thumbnail} />
+          ) : (
+            <Image
+              source={product.thumbnail}
+              style={styles.thumbnail}
+              contentFit="cover"
+              placeholder={{ blurhash: 'L6PZfSi_.AyE_3t7t7R**0o#DgR4' }}
+              transition={200}
+              onError={() => setImageFailed(true)}
+            />
+          )}
           <ThemedView style={styles.info}>
             <ThemedText type="default" numberOfLines={2}>
               {product.title}

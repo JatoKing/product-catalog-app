@@ -12,7 +12,7 @@ import { Spacing } from '@/constants/theme';
 import { useProducts } from '@/data/products/use-products';
 
 export default function ProductListScreen() {
-  const { products, isLoading, isLoadingMore, error, hasMore, loadMore, retry } =
+    const { products, isLoading, isLoadingMore, isRefreshing, error, hasMore, loadMore, retry, refresh } =
     useProducts();
 
   const [query, setQuery] = useState('');
@@ -68,6 +68,8 @@ export default function ProductListScreen() {
         </ThemedView>
       ) : (
         <FlatList
+          refreshing={isRefreshing}
+          onRefresh={refresh}
           data={filteredProducts}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => <ProductListItem product={item} />}

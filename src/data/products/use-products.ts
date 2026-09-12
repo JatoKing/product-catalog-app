@@ -11,6 +11,7 @@ export function useProducts() {
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchPage = useCallback(async (skip: number) => {
@@ -46,14 +47,28 @@ export function useProducts() {
       setIsLoadingMore(false);
     }
   }, [fetchPage, isLoadingMore, products.length, total]);
+  
+  const refresh = useCallback(async () => {
+    setIsRefreshing(true);
+    setError(null);
+    try {
+      await fetchPage(0);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Something went wrong');
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [fetchPage]);
 
   return {
     products,
     isLoading,
     isLoadingMore,
+    isRefreshing,
     error,
     hasMore: products.length < total,
     loadMore,
     retry: loadInitial,
+    refresh,
   };
 }
