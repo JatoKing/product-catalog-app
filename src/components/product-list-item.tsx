@@ -1,7 +1,7 @@
 // src/components/product-list-item.tsx
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 import { Product } from '@/data/products/types';
 import { Spacing } from '@/constants/theme';
@@ -14,23 +14,25 @@ export function ProductListItem({ product }: { product: Product }) {
       href={{ pathname: '/product/[id]', params: { id: String(product.id) } }}
       asChild
     >
-      <ThemedView type="backgroundElement" style={styles.row}>
-        <Image
-          source={product.thumbnail}
-          style={styles.thumbnail}
-          contentFit="cover"
-          placeholder={{ blurhash: 'L6PZfSi_.AyE_3t7t7R**0o#DgR4' }}
-          transition={200}
-        />
-        <ThemedView style={styles.info}>
-          <ThemedText type="default" numberOfLines={2}>
-            {product.title}
-          </ThemedText>
-          <ThemedText type="smallBold" themeColor="textSecondary">
-            ${product.price}
-          </ThemedText>
+      <Pressable>
+        <ThemedView type="backgroundElement" style={styles.row}>
+          <Image
+            source={product.thumbnail}
+            style={styles.thumbnail}
+            contentFit="cover"
+            placeholder={{ blurhash: 'L6PZfSi_.AyE_3t7t7R**0o#DgR4' }}
+            transition={200}
+          />
+          <ThemedView style={styles.info}>
+            <ThemedText type="default" numberOfLines={2}>
+              {product.title}
+            </ThemedText>
+            <ThemedText type="smallBold" themeColor="textSecondary">
+              ${product.price}
+            </ThemedText>
+          </ThemedView>
         </ThemedView>
-      </ThemedView>
+      </Pressable>
     </Link>
   );
 }
